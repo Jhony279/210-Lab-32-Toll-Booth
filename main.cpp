@@ -1,17 +1,14 @@
 // COMSC-210 | Lab 32 | Johnathan Perez Baltazar
-
 #include <iostream>
 #include <deque>
 #include "Car.h"
 using namespace std;
 
-// Function Prototypes:
-
 const int INITIAL_SIZE = 2;
 const int PAY_PROB = 55, JOIN_PROB = 45;
 
 /**
- * @brief - Description of main
+ * @brief Simulation of a toll booth by using a deque to manage the queue of cars.
  * @return 
 */
 int main() {
@@ -30,31 +27,32 @@ int main() {
         c.print();
     }
 
+    int i = 1; // Counter for the number of iterations
     while(!tollLine.empty()){
         int p = rand() % 100; // Generate a random number between 0 and 99
-        int i = 1; // Counter for the number of iterations
 
         cout << "Time: " << i << " Operation: ";
-
         if (p < PAY_PROB) {
             cout << "Car Paid: ";
             tollLine.front().print(); // Print the front car that is paying
             tollLine.pop_front(); // Remove the front car from the deque
-            i++;
+            ++i;
+
         } else {
             cout << "Joined Lane: ";
             tollLine.back().print(); // Print the front car that is paying
             tollLine.push_back(Car()); // Add a new car to the back of the deque
-            i++;
+            ++i;
         }
 
-    // Print ramining cars in the queue
-    cout << "queue:\n";
-    for (Car c : tollLine) {
-        cout << "   ";
-        c.print();
+        // Print remaining cars in the queue
+        cout << "queue:\n";
+        for (Car c : tollLine) {
+            cout << "   ";
+            c.print();
+        }
     }
-    }
+    cout << "   Empty\n";
 
     return 0;
 }
