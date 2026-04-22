@@ -24,22 +24,36 @@ int main() {
     }
 
     // Print the initial deque
-    cout << "Initial Deque:\n";
+    cout << "Initial queue:\n";
     for (Car c : tollLine) {
+        cout << "   ";
         c.print();
     }
 
     while(!tollLine.empty()){
-        // Generate a random number between 0 and 99
-        int p, j = rand() % 100;
+        int p = rand() % 100; // Generate a random number between 0 and 99
+        int i = 1; // Counter for the number of iterations
+
+        cout << "Time: " << i << " Operation: ";
 
         if (p < PAY_PROB) {
+            cout << "Car Paid: ";
+            tollLine.front().print(); // Print the front car that is paying
             tollLine.pop_front(); // Remove the front car from the deque
-        }
-        if (j < JOIN_PROB) {
+            i++;
+        } else {
+            cout << "Joined Lane: ";
+            tollLine.back().print(); // Print the front car that is paying
             tollLine.push_back(Car()); // Add a new car to the back of the deque
+            i++;
         }
-        
+
+    // Print ramining cars in the queue
+    cout << "queue:\n";
+    for (Car c : tollLine) {
+        cout << "   ";
+        c.print();
+    }
     }
 
     return 0;
