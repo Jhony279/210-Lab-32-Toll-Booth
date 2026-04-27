@@ -16,7 +16,6 @@ int main() {
     srand(time(0)); // Seed the random number generator
 
     // Create a deque and populate it with Car objects
-    // deque<Car> tollLine;
     array<deque<Car>, 4> tollLanes; // Array of 4 deques for 4 toll lanes
 
     for (int i = 0; i < INITIAL_SIZE; i++) {
