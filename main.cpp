@@ -7,10 +7,11 @@ using namespace std;
 
 const int INITIAL_SIZE = 2, LANES = 4;
 const int PAY_PROB = 46, JOIN_PROB = 39, SWITCH_PROB = 15;
+const int MAX_ITERATIONS = 100; // Maximum number of iterations to prevent infinite loops
 
 void printQueue(const array<deque<Car>, LANES>&);
 bool tollLineEmpty(const array<deque<Car>, LANES>&);
-void laneSwitch(array<deque<Car>, LANES>&, int, int);
+void laneSwitch(array<deque<Car>, LANES>&, int);
 
 /**
  * @brief Simulation of a toll booth by using a deque to manage the queue of cars.
@@ -38,34 +39,36 @@ int main() {
     }
 
     int i = 1; // Counter for the number of iterations
-    while(!tollLineEmpty(tollLanes)){
-        int p = rand() % 101; // Generate a random number between 0 and 100
-
+    while(!tollLineEmpty(tollLanes) && i < MAX_ITERATIONS){
         cout << "Time: " << i << endl;
         for (int lane = 0; lane < tollLanes.size(); lane++) {
             auto& tollLine = tollLanes[lane]; // Reference to the current lane's deque
+            int p = rand() % 101; // Generate a random number between 0 and 100
 
-            if (p < PAY_PROB) {
+            if (!tollLine.empty() && p < PAY_PROB) {
                 cout << "Lane: " << lane + 1 << " Paid: ";
                 tollLine.front().print(); // Print the front car that is paying
                 tollLine.pop_front(); // Remove the front car from the deque
-                ++i;
 
             } else if (p < PAY_PROB + JOIN_PROB) {
                 cout << "Lane: " << lane + 1 << " Joined: ";
-                tollLine.back().print(); // Print the front car that is paying
                 tollLine.push_back(Car()); // Add a new car to the back of the deque
-                ++i;
+                tollLine.back().print(); // Print the new car that joined
             } else {
                 cout << "Lane: " << lane + 1 << " Switched: ";
-                laneSwitch(tollLanes, lane, (lane + 1) % LANES);
-                ++i;
+                laneSwitch(tollLanes, lane);
             }
+            ++i; // Increment the iteration counter
         }
         // Print remaining cars in the queue
         printQueue(tollLanes);
     }
-    cout << "   All lanes are empty\n";
+
+    if (i >= MAX_ITERATIONS) {
+        cout << "Maximum iterations reached. Ending simulation." << endl;
+    } else {
+        cout << "   All lanes are empty\n";
+    }
 
     return 0;
 }
@@ -95,12 +98,16 @@ bool tollLineEmpty(const array<deque<Car>, LANES>& tollLanes) {
     return true; // All lanes are empty
 }
 
-// Switch a car from the end of a lane to the end of the next lane
-void laneSwitch(array<deque<Car>, LANES>& tollLanes, int fromLane, int toLane) {
+// Switch a car from the end of a lane to the end of a random lane
+void laneSwitch(array<deque<Car>, LANES>& tollLanes, int fromLane) {
     if (!tollLanes[fromLane].empty()) { // Check if the current lane is not empty
+        int toLane = rand() % LANES;
+        while (toLane == fromLane) {
+            toLane = rand() % LANES;
+        }
         Car carToSwitch = tollLanes[fromLane].back();
         carToSwitch.print(); 
         tollLanes[fromLane].pop_back(); // Remove the car from the current lane
-        tollLanes[toLane].push_back(carToSwitch); // Add the car to the next lane
+        tollLanes[toLane].push_back(carToSwitch); // Add the car to the random lane
     }
 }
