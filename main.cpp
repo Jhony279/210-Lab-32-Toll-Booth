@@ -6,7 +6,7 @@
 using namespace std;
 
 const int INITIAL_SIZE = 2, LANES = 4;
-const int PAY_PROB = 55, JOIN_PROB = 45;
+const int PAY_PROB = 50, JOIN_PROB = 50;
 
 void printQueue(const array<deque<Car>, LANES>&);
 bool tollLineEmpty(const array<deque<Car>, LANES>&);
@@ -45,13 +45,13 @@ int main() {
             auto& tollLine = tollLanes[lane]; // Reference to the current lane's deque
 
             if (p < PAY_PROB) {
-                cout << "Car Paid: ";
+                cout << "Lane: " << lane + 1 << " Paid: ";
                 tollLine.front().print(); // Print the front car that is paying
                 tollLine.pop_front(); // Remove the front car from the deque
                 ++i;
 
             } else {
-                cout << "Joined Lane: ";
+                cout << "Lane: " << lane + 1 << " Joined: ";
                 tollLine.back().print(); // Print the front car that is paying
                 tollLine.push_back(Car()); // Add a new car to the back of the deque
                 ++i;
@@ -60,14 +60,14 @@ int main() {
         // Print remaining cars in the queue
         printQueue(tollLanes);
     }
-    cout << "   Empty\n";
+    cout << "   All lanes are empty\n";
 
     return 0;
 }
 
 void printQueue(const array<deque<Car>, LANES>& tollLanes) {
     for (int lane = 0; lane < tollLanes.size(); lane++) {
-        cout << "Lane " << lane + 1 << ":\n";
+        cout << "Lane: " << lane + 1 << ":\n";
         if (tollLanes[lane].empty()) {
             cout << "   Empty\n";
         } else {
