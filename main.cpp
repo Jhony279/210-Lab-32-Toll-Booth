@@ -7,7 +7,7 @@ using namespace std;
 
 const int INITIAL_SIZE = 2, LANES = 4;
 const int PAY_PROB = 46, JOIN_PROB = 39, SWITCH_PROB = 15;
-const int MAX_ITERATIONS = 100; // Maximum number of iterations to prevent infinite loops
+const int MAX_ITERATIONS = 10000; // Max iterations to prevent infinite/long loops
 
 void printQueue(const array<deque<Car>, LANES>&);
 bool tollLineEmpty(const array<deque<Car>, LANES>&);
@@ -39,7 +39,7 @@ int main() {
     }
 
     int i = 1; // Counter for the number of iterations
-    while(!tollLineEmpty(tollLanes) && i < MAX_ITERATIONS){
+    while(!tollLineEmpty(tollLanes) && i <= MAX_ITERATIONS){
         cout << "Time: " << i << endl;
         for (int lane = 0; lane < tollLanes.size(); lane++) {
             auto& tollLine = tollLanes[lane]; // Reference to the current lane's deque
@@ -54,12 +54,14 @@ int main() {
                 cout << "Lane: " << lane + 1 << " Joined: ";
                 tollLine.push_back(Car()); // Add a new car to the back of the deque
                 tollLine.back().print(); // Print the new car that joined
+                
             } else {
                 cout << "Lane: " << lane + 1 << " Switched: ";
                 laneSwitch(tollLanes, lane);
             }
-            ++i; // Increment the iteration counter
         }
+        ++i; // Increment the iteration counter
+
         // Print remaining cars in the queue
         printQueue(tollLanes);
     }
