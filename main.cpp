@@ -17,7 +17,6 @@ int main() {
 
     // Create a deque and populate it with Car objects
     array<deque<Car>, 4> tollLanes; // Array of 4 deques for 4 toll lanes
-
     for (int i = 0; i < INITIAL_SIZE; i++) {
         for (int lane = 0; lane < tollLanes.size(); lane++) {
             tollLanes[lane].push_back(Car());
@@ -25,7 +24,7 @@ int main() {
     }
 
     // print the initial state of each toll lane
-    cout << "Initial queue" << endl;
+    cout << "Initial queue:" << endl;
     for (int lane = 0; lane < tollLanes.size(); lane++) {
         cout << "Lane " << lane + 1 << ":\n";
         for (Car c : tollLanes[lane]) {
